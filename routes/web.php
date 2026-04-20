@@ -11,6 +11,8 @@ Route::view('/lapor-situs', 'pages.landing.lapor-situs')->name('landing.lapor-si
 
 Route::middleware(['auth'])->group(function () {
     Route::view('dashboard', 'pages.admin.dashboard')->name('dashboard');
+    Route::livewire('/kategori-budaya', 'pages::kategori.index')->name('kategori-budaya.index');
+    Route::livewire('/kategori-budaya/create', 'pages::kategori.create')->name('kategori-budaya.create');
 });
 
 require __DIR__.'/settings.php';

@@ -23,6 +23,11 @@
             Kelola Daftar Wisata & Warisan
         </button>
 
+        <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="nav-item">
+            <span class="material-symbols-outlined">photo_library</span>
+            Kelola Kategori Budaya
+        </a>
+
         <button class="nav-item" data-page="page-galeri">
             <span class="material-symbols-outlined">photo_library</span>
             Kelola Galeri
@@ -52,7 +57,9 @@
         </button>
 
         <div class="sidebar-user">
-            <img class="sidebar-user-avatar" src="https://ui-avatars.com/api/?name=Admin+User&background=1A362D&color=D4AF37&bold=true&size=72" alt="Admin Avatar" />
+            <img class="sidebar-user-avatar"
+                src="https://ui-avatars.com/api/?name=Admin+User&background=1A362D&color=D4AF37&bold=true&size=72"
+                alt="Admin Avatar" />
             <div class="sidebar-user-info">
                 <h4>Admin User</h4>
                 <p>Archivist</p>
