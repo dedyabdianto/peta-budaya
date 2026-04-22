@@ -197,6 +197,7 @@ body.admin-body {
     font-weight: 700;
     cursor: pointer;
     transition: var(--transition-smooth);
+    text-decoration: none;
 }
 
 .sidebar-new-record:hover {
@@ -413,14 +414,6 @@ body.admin-body {
     padding: 28px 32px 40px;
 }
 
-.page-section {
-    display: none;
-    animation: fadeIn 0.3s ease;
-}
-
-.page-section.active {
-    display: block;
-}
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }

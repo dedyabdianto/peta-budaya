@@ -1,34 +1,8 @@
 /**
  * Admin Panel — Warisan Malind CMS
- * SPA-like Navigation & Interaction Logic
+ * Interaction Logic (non-SPA)
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // ---- SPA Navigation ----
-    const navItems = document.querySelectorAll('.nav-item[data-page]');
-    const pageSections = document.querySelectorAll('.page-section');
-
-    function navigateTo(page) {
-        // Update nav active state
-        navItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.page === page);
-        });
-
-        // Show/hide pages
-        pageSections.forEach(section => {
-            section.classList.toggle('active', section.id === page);
-        });
-
-        // Close mobile sidebar
-        closeSidebar();
-    }
-
-    navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            navigateTo(item.dataset.page);
-        });
-    });
-
     // ---- Mobile Sidebar Toggle ----
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -60,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.addEventListener('click', closeSidebar);
     }
 
-    // ---- Tab Filters (Daftar Warisan & Verifikasi) ----
+    // ---- Tab Filters ----
     document.querySelectorAll('.filter-tabs').forEach(tabGroup => {
         const tabs = tabGroup.querySelectorAll('.filter-tab');
         tabs.forEach(tab => {
