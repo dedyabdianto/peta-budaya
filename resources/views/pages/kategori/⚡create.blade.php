@@ -1,101 +1,82 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 
-new class extends Component {
-    #[Validate('nullable|string')]
+new
+#[Layout('layouts.admin', ['title' => 'Tambah Kategori Budaya'])]
+class extends Component {
+    #[Validate('required|string|max:255')]
     public string $nama_kategori = '';
 
-    #[Validate('required|string')]
+    #[Validate('nullable|string|max:255')]
     public string $icon_marker = '';
 
-    #[Validate('required|string')]
+    #[Validate('nullable|string|max:50')]
     public string $warna_badge = '';
 
-    #[Validate('required|string')]
+    #[Validate('nullable|string')]
     public string $deskripsi = '';
 
     public function save()
     {
         $this->validate();
 
-        $kategori = new \App\Models\KategoriBudaya();
-        $kategori->nama_kategori = $this->nama_kategori;
-        $kategori->icon_marker = $this->icon_marker;
-        $kategori->warna_badge = $this->warna_badge;
-        $kategori->deskripsi = $this->deskripsi;
-        $kategori->save();
+        \App\Models\KategoriBudaya::create([
+            'nama_kategori' => $this->nama_kategori,
+            'icon_marker' => $this->icon_marker,
+            'warna_badge' => $this->warna_badge,
+            'deskripsi' => $this->deskripsi,
+        ]);
 
-        // Reset form setelah penyimpanan
-        $this->reset();
-
-        // Flash message
         session()->flash('message', 'Kategori budaya berhasil dibuat.');
+
+        return $this->redirect(route('kategori-budaya.index'), navigate: true);
     }
 };
 ?>
 
 <div>
-    <form wire:submit="save" class="space-y-6">
-        <!-- Nama Kategori -->
-        <div>
-            <label for="nama_kategori" class="block text-sm font-medium text-gray-700">
-                Nama Kategori
-            </label>
-            <input type="text" id="nama_kategori" wire:model.live.debounce="nama_kategori" placeholder="Masukkan nama kategori" autofocus
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-            @error('nama_kategori')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Icon Marker -->
-        <div>
-            <label for="icon_marker" class="block text-sm font-medium text-gray-700">
-                Icon Marker
-            </label>
-            <input type="text" id="icon_marker" wire:model="icon_marker" placeholder="Masukkan icon marker"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-            @error('icon_marker')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Warna Badge -->
-        <div>
-            <label for="warna_badge" class="block text-sm font-medium text-gray-700">
-                Warna Badge
-            </label>
-            <input type="text" id="warna_badge" wire:model="warna_badge" placeholder="Masukkan warna badge"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-            @error('warna_badge')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Deskripsi -->
-        <div>
-            <label for="deskripsi" class="block text-sm font-medium text-gray-700">
-                Deskripsi
-            </label>
-            <textarea id="deskripsi" wire:model="deskripsi" placeholder="Masukkan deskripsi" rows="4"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-            @error('deskripsi')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Actions -->
-        <div class="flex gap-3">
-            <button type="submit"
-                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                Simpan
-            </button>
-            <a href="{{ route('kategori-budaya.index') }}"
-                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                Batal
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div class="page-header-actions">
+            <div>
+                <h1>Tambah Kategori Baru</h1>
+                <p>Isi data untuk menambahkan kategori budaya baru.</p>
+            </div>
+            <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="btn btn-outline">
+                <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
+                Kembali
             </a>
         </div>
-    </form>
+    </div>
+
+    {{-- Flash Alerts --}}
+    <x-admin.flash-alert />
+
+    {{-- Form Card --}}
+    <div class="card" style="max-width:700px;">
+        <div class="card-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="modal-icon green">
+                    <span class="material-symbols-outlined">add_circle</span>
+                </div>
+                <h3>Data Kategori</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <form wire:submit="save">
+                @include('pages.kategori._form')
+
+                <div style="display:flex; gap:10px; margin-top:20px; justify-content:flex-end;">
+                    <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="btn btn-outline">Batal</a>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined" style="font-size:18px">save</span>
+                        Simpan Kategori
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

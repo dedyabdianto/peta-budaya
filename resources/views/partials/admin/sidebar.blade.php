@@ -23,8 +23,8 @@
             Kelola Daftar Wisata & Warisan
         </button>
 
-        <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="nav-item">
-            <span class="material-symbols-outlined">photo_library</span>
+        <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="nav-item {{ request()->routeIs('kategori-budaya.*') ? 'active' : '' }}">
+            <span class="material-symbols-outlined">category</span>
             Kelola Kategori Budaya
         </a>
 
