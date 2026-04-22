@@ -28,6 +28,11 @@
             Kelola Kategori Budaya
         </a>
 
+         <a href="{{ route('cagar-budaya.index') }}" wire:navigate class="nav-item {{ request()->routeIs('cagar-budaya.*') ? 'active' : '' }}">
+            <span class="material-symbols-outlined">category</span>
+            Kelola Cagar Budaya
+        </a>
+
         <button class="nav-item" data-page="page-galeri">
             <span class="material-symbols-outlined">photo_library</span>
             Kelola Galeri

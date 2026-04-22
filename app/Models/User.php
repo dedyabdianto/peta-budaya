@@ -12,6 +12,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\KategoriBudaya;
+use App\Models\CagarBudaya;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -44,4 +46,13 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    public function kategori_budaya(){
+        return $this->hasMany(KategoriBudaya::class);
+    }
+
+    public function cagar_budaya(){
+        return $this->hasMany(CagarBudaya::class, 'user_id');
+    }
+
 }

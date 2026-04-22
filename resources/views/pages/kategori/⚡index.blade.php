@@ -5,11 +5,10 @@ use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use App\Models\KategoriBudaya;
 
-new
-#[Layout('layouts.admin', ['title' => 'Kelola Kategori Budaya'])]
-class extends Component {
+new #[Layout('layouts.admin', ['title' => 'Kelola Kategori Budaya'])] class extends Component {
     use WithPagination;
 
+    public string $user_id;
     public string $nama_kategori = '';
     public string $icon_marker = '';
     public string $warna_badge = '';
@@ -22,20 +21,38 @@ class extends Component {
     public string $deleteName = '';
     public string $search = '';
 
+    public function mount(): void
+    {
+        $this->resetForm();
+    }
+
     public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function rendering($view): void
+    // public function rendering($view): void
+    // {
+    //     $query = KategoriBudaya::query();
+
+    //     if ($this->search) {
+    //         $query->where('nama_kategori', 'like', '%' . $this->search . '%');
+    //     }
+
+    //     $view->with('kategori', $query->orderBy('nama_kategori')->paginate(1));
+    // }
+
+    public function render()
     {
-        $query = KategoriBudaya::query();
+        $query = \App\Models\KategoriBudaya::query();
 
         if ($this->search) {
             $query->where('nama_kategori', 'like', '%' . $this->search . '%');
         }
 
-        $view->with('kategori', $query->orderBy('nama_kategori')->paginate(10));
+        return $this->view([
+            'kategori' => $query->with('user')->orderBy('nama_kategori')->paginate(1),
+        ]);
     }
 
     // Create
@@ -60,7 +77,14 @@ class extends Component {
             'deskripsi' => 'nullable|string',
         ]);
 
-        KategoriBudaya::create([
+        // KategoriBudaya::create([
+        //     'nama_kategori' => $this->nama_kategori,
+        //     'icon_marker' => $this->icon_marker,
+        //     'warna_badge' => $this->warna_badge,
+        //     'deskripsi' => $this->deskripsi,
+        // ]);
+
+         auth()->user()->kategori_budaya()->create([
             'nama_kategori' => $this->nama_kategori,
             'icon_marker' => $this->icon_marker,
             'warna_badge' => $this->warna_badge,
@@ -71,7 +95,7 @@ class extends Component {
         $this->closeCreateModal();
     }
 
-    // Edit 
+    // Edit
     public function openEditModal(string $id): void
     {
         $kategori = KategoriBudaya::findOrFail($id);
@@ -110,7 +134,7 @@ class extends Component {
         $this->closeEditModal();
     }
 
-    // Delete 
+    // Delete
     public function confirmDelete(string $id, string $name): void
     {
         $this->deleteId = $id;
@@ -181,6 +205,7 @@ class extends Component {
                         <th>Icon Marker</th>
                         <th>Warna Badge</th>
                         <th>Deskripsi</th>
+                        <th>Dibuat Oleh</th>
                         <th style="width:140px;">Aksi</th>
                     </tr>
                 </thead>
@@ -196,8 +221,10 @@ class extends Component {
                             <td>
                                 @if ($item->icon_marker)
                                     <div style="display:flex; align-items:center; gap:8px;">
-                                        <span class="material-symbols-outlined" style="font-size:20px; color:var(--jungle-mid);">{{ $item->icon_marker }}</span>
-                                        <span style="font-size:0.78rem; color:var(--text-muted);">{{ $item->icon_marker }}</span>
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:20px; color:var(--jungle-mid);">{{ $item->icon_marker }}</span>
+                                        <span
+                                            style="font-size:0.78rem; color:var(--text-muted);">{{ $item->icon_marker }}</span>
                                     </div>
                                 @else
                                     <span style="font-size:0.82rem; color:var(--text-muted);">—</span>
@@ -206,16 +233,17 @@ class extends Component {
                             <td>
                                 @if ($item->warna_badge)
                                     <div style="display:flex; align-items:center; gap:8px;">
-                                        <span style="
+                                        <span
+                                            style="
                                             width:24px;
                                             height:24px;
                                             border-radius:6px;
                                             background:{{ $item->warna_badge }};
                                             display:inline-block;
                                             border:1px solid rgba(0,0,0,0.1);
-                                            flex-shrink:0;
-                                        "></span>
-                                        <span class="badge" style="background:{{ $item->warna_badge }}20; color:{{ $item->warna_badge }};">
+                                            flex-shrink:0;"></span>
+                                        <span class="badge"
+                                            style="background:{{ $item->warna_badge }}20; color:{{ $item->warna_badge }}">
                                             {{ $item->warna_badge }}
                                         </span>
                                     </div>
@@ -224,13 +252,21 @@ class extends Component {
                                 @endif
                             </td>
                             <td>
-                                <span style="font-size:0.82rem; color:var(--text-secondary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                                <span
+                                    style="font-size:0.82rem; color:var(--text-secondary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
                                     {{ $item->deskripsi ?: '—' }}
+                                </span>
+                            </td>
+                             <td>
+                                <span
+                                    style="font-size:0.82rem; color:var(--text-secondary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                                    {{ $item->user->name ?? '—' }}
                                 </span>
                             </td>
                             <td>
                                 <div style="display:flex; gap:6px;">
-                                    <button class="btn btn-outline btn-sm" wire:click="openEditModal('{{ $item->id }}')">
+                                    <button class="btn btn-outline btn-sm"
+                                        wire:click="openEditModal('{{ $item->id }}')">
                                         <span class="material-symbols-outlined" style="font-size:14px">edit</span>
                                         Edit
                                     </button>
@@ -246,9 +282,11 @@ class extends Component {
                         <tr>
                             <td colspan="6" style="text-align:center; padding:48px 20px;">
                                 <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
-                                    <span class="material-symbols-outlined" style="font-size:48px; color:var(--text-muted); opacity:0.5;">category</span>
+                                    <span class="material-symbols-outlined"
+                                        style="font-size:48px; color:var(--text-muted); opacity:0.5;">category</span>
                                     <div>
-                                        <p style="margin:0; font-size:0.95rem; font-weight:600; color:var(--text-secondary);">
+                                        <p
+                                            style="margin:0; font-size:0.95rem; font-weight:600; color:var(--text-secondary);">
                                             @if ($search)
                                                 Tidak ada kategori yang cocok
                                             @else
@@ -344,12 +382,7 @@ class extends Component {
     @endif
 
     {{-- modal hapus kategori --}}
-    <x-admin.modal-delete
-        :show="$showDeleteModal"
-        :name="$deleteName"
-        title="Hapus Kategori Budaya"
+    <x-admin.modal-delete :show="$showDeleteModal" :name="$deleteName" title="Hapus Kategori Budaya"
         message="Apakah Anda yakin ingin menghapus kategori ini? Data yang terkait dengan kategori ini mungkin terpengaruh."
-        action="delete"
-        cancel="cancelDelete"
-    />
+        action="delete" cancel="cancelDelete" />
 </div>

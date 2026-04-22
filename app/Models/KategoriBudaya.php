@@ -20,4 +20,8 @@ class KategoriBudaya extends Model
         'warna_badge',
         'deskripsi',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
