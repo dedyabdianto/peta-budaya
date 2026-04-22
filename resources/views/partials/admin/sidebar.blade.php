@@ -8,20 +8,20 @@
 
     {{-- Navigation --}}
     <nav class="sidebar-nav">
-        <button class="nav-item active" data-page="page-dashboard">
+        <a href="{{ route('dashboard') }}" wire:navigate class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <span class="material-symbols-outlined">dashboard</span>
             Dashboard
-        </button>
+        </a>
 
-        <button class="nav-item" data-page="page-peta">
+        <a href="{{ route('peta.index') }}" wire:navigate class="nav-item {{ request()->routeIs('peta.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">map</span>
             Kelola Peta & GIS
-        </button>
+        </a>
 
-        <button class="nav-item" data-page="page-warisan">
+        <a href="{{ route('warisan.index') }}" wire:navigate class="nav-item {{ request()->routeIs('warisan.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">museum</span>
             Kelola Daftar Wisata & Warisan
-        </button>
+        </a>
 
         <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="nav-item {{ request()->routeIs('kategori-budaya.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">category</span>
@@ -34,32 +34,33 @@
         </a>
 
         <button class="nav-item" data-page="page-galeri">
+        <a href="{{ route('galeri.index') }}" wire:navigate class="nav-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">photo_library</span>
             Kelola Galeri
-        </button>
+        </a>
 
-        <button class="nav-item" data-page="page-berita">
+        <a href="{{ route('berita.index') }}" wire:navigate class="nav-item {{ request()->routeIs('berita.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">article</span>
             Kelola Berita
-        </button>
+        </a>
 
-        <button class="nav-item" data-page="page-verifikasi">
+        <a href="{{ route('verifikasi.index') }}" wire:navigate class="nav-item {{ request()->routeIs('verifikasi.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">fact_check</span>
             Verifikasi Laporan
-        </button>
+        </a>
 
-        <button class="nav-item" data-page="page-pengaturan">
+        <a href="{{ route('pengaturan.index') }}" wire:navigate class="nav-item {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">settings</span>
             Pengaturan
-        </button>
+        </a>
     </nav>
 
     {{-- Footer --}}
     <div class="sidebar-footer">
-        <button class="sidebar-new-record" onclick="document.querySelector('[data-page=page-warisan]').click()">
+        <a href="{{ route('warisan.index') }}" wire:navigate class="sidebar-new-record">
             <span class="material-symbols-outlined" style="font-size:18px">add</span>
             New Record
-        </button>
+        </a>
 
         <div class="sidebar-user">
             <img class="sidebar-user-avatar"
