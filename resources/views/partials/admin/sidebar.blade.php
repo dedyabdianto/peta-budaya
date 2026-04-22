@@ -33,7 +33,7 @@
             Kelola Cagar Budaya
         </a>
 
-        <button class="nav-item" data-page="page-galeri">
+     
         <a href="{{ route('galeri.index') }}" wire:navigate class="nav-item {{ request()->routeIs('galeri.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">photo_library</span>
             Kelola Galeri
