@@ -3,11 +3,19 @@
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
+use App\Models\CagarBudaya;
+use App\Models\KategoriBudaya;
+use Illuminate\Support\Facades\Storage;
 
-new class extends Component
+
+
+new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Component
 {
     use WithPagination;
-    use withFileUploads;
+    use WithFileUploads;
 
     public string $user_id;
     public string $kategori_budaya_id = '';
@@ -25,82 +33,83 @@ new class extends Component
     public bool $showCreateModal = false;
     public bool $showEditModal = false;
     public bool $showDeleteModal = false;
-    public $kategoriList = [];
     public ?string $editId;
     public ?string $deleteId;
     public ?string $deleteName;
+    // public $kategoriList = []; 
 
-
-    public function mount()
+    
+    #[Computed]
+    public function kategoriList()
     {
-        $this->kategoriList = \App\Models\KategoriBudaya::all();
+        return KategoriBudaya::select('id', 'nama_kategori')->orderBy('nama_kategori')->get();
     }
 
+   
+    #[Computed]
+    public function cagarBudaya()
+    {
+        return CagarBudaya::query()
+            ->with(['kategoriBudaya:id,nama_kategori', 'user:id,name']) 
+            ->when($this->search, function ($q) {
+                $q->where(function ($q) {
+                    $q->where('nama_cagar_budaya', 'like', "%{$this->search}%")
+                      ->orWhere('alamat', 'like', "%{$this->search}%")
+                      ->orWhere('tahun_penemuan', 'like', "%{$this->search}%");
+                      
+                });
+            })
+            ->latest()
+            ->paginate(10);
+    }
+
+    // 3. Reset pagination kalau search berubah
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    // 4. render() jadi kosong
     public function render()
-        {
-            $query = \App\Models\CagarBudaya::query();
-            $query_kategori = \App\Models\KategoriBudaya::query();
+    {
+        return $this->view([
+            'title' => 'Kelola Cagar Budaya',
+        ]); 
+    }
 
-            if ($this->search) {
-             $query->where(function ($q) {
-                 $q->where('nama_cagar_budaya', 'like', '%' . $this->search . '%')
-                    ->orWhere('deskripsi', 'like', '%' . $this->search . '%')
-                    ->orWhere('alamat', 'like', '%' . $this->search . '%')
-                    ->orWhere('tahun_penemuan', 'like', '%' . $this->search . '%');
-            });
+    public function store()
+    {
+        $validated = $this->validate([
+            'nama_cagar_budaya' => 'required|string|max:255',
+            'kategori_budaya_id' => 'required|exists:kategori_budayas,id',
+            'deskripsi' => 'nullable|string',
+            'alamat' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'thumbnail' => 'nullable|image|max:5120',
+            'sk_penetapan' => 'nullable|string|max:255',
+            'tahun_penemuan' => 'nullable|digits:4',
+            'status_pelestarian' => 'nullable|string',
+            'status' => 'required|in:draft,published',
+        ]);
 
-            $query_kategori->where('nama_kategori', 'like', '%' . $this->search . '%');
-            }
+        $imagePath = $this->thumbnail?->store('thumbnails', 'public');
 
-            return $this->view([
-                'cagar_budaya' => $query->with('kategoriBudaya', 'user')->latest()->paginate(10),
-                'kategori' => $query_kategori->latest()->get(),
-            ])->layout('layouts.admin')->title('Kelola Cagar Budaya')->with(['title' => 'Cagar Budaya']);
-        }
+        CagarBudaya::create([
+            ...$validated,
+            'user_id' => auth()->id(),
+            'thumbnail' => $imagePath,
+            'latitude' => filled($this->latitude) ? $this->latitude : 0,
+            'longitude' => filled($this->longitude) ? $this->longitude : 0,
+            'tahun_penemuan' => $this->tahun_penemuan ?: 0,
+        ]);
 
-        public function store()
-        {
-            $this->validate([
-                'nama_cagar_budaya' => 'required|string|max:255',
-                'kategori_budaya_id' => 'required|exists:kategori_budayas,id',
-                'deskripsi' => 'nullable|string',
-                'alamat' => 'nullable|string',
-                'latitude' => 'nullable|numeric',
-                'longitude' => 'nullable|numeric',
-                'thumbnail' => 'nullable|image|max:5120',
-                'sk_penetapan' => 'nullable|string|max:255',
-                'tahun_penemuan' => 'nullable|digits:4',
-                'status_pelestarian' => 'nullable|string',
-                'status' => 'required|in:draft,published',
-            ]);
+        session()->flash('success', 'Cagar Budaya berhasil ditambahkan.');
+        $this->closeCreateModal();
+        unset($this->cagarBudaya); // clear cache computed 
+    }
 
-            $imagePath = null;
-            if ($this->thumbnail) {
-                $imagePath = $this->thumbnail->storeAs('thumbnails', $this->thumbnail->hashName(), 'public');
-            }
-
-            \App\Models\CagarBudaya::create([
-                'user_id' => auth()->id(),
-                'kategori_budaya_id' => $this->kategori_budaya_id,
-                'nama_cagar_budaya' => $this->nama_cagar_budaya,
-                'deskripsi' => $this->deskripsi,
-                'alamat' => $this->alamat,
-                'latitude' => filled($this->latitude) ? $this->latitude : 0.0000000,
-                'longitude' => filled($this->longitude) ? $this->longitude : 0.0000000,
-                'thumbnail' => $imagePath,
-                'sk_penetapan' => $this->sk_penetapan,
-                'tahun_penemuan' => $this->tahun_penemuan ? $this->tahun_penemuan : 0000,
-                'status_pelestarian' => $this->status_pelestarian,
-                'status' => $this->status,
-            ]);
-
-            session()->flash('success', 'Cagar Budaya berhasil ditambahkan.');
-            $this->resetInput();
-            $this->closeCreateModal();
-        }
-
-
-        public function update()
+    public function update()
         {
             $this->validate([
                 'nama_cagar_budaya' => 'required|string|max:255',
@@ -149,79 +158,73 @@ new class extends Component
             session()->flash('success', 'Cagar Budaya berhasil diperbarui.');
             $this->resetInput();
             $this->closeEditModal();
+            unset($this->cagarBudaya); // clear cache computed
         }
 
-        public function resetInput()
-        {
-            $this->kategori_budaya_id = '';
-            $this->nama_cagar_budaya = '';
-            $this->deskripsi = '';
-            $this->alamat = '';
-            $this->latitude = '';
-            $this->longitude = '';
-            $this->thumbnail = '';
-            $this->sk_penetapan = '';
-            $this->tahun_penemuan = '';
-            $this->status_pelestarian = '';
-            $this->status = 'draft';
-        }
+    public function resetInput()
+    {
+        $this->resetExcept(['search', 'page']); // jangan reset search & page
+        $this->status = 'draft';
+    }
          
-        public function openCreateModal()
-        {
-            $this->resetInput();
-            $this->showCreateModal = true;
-        }
+    public function openCreateModal()
+    {
+        $this->resetInput();
+        $this->showCreateModal = true;
+    }
 
-        public function closeCreateModal()
-        {
-            $this->resetInput();
-            $this->showCreateModal = false;
-        }
+    public function closeCreateModal()
+    {
+        $this->resetInput();
+        $this->showCreateModal = false;
+        // $this->resetValidation();
+    }
 
-         public function openEditModal(string $id)
-        {
-            $cagar = \App\Models\CagarBudaya::findOrFail($id);
-            $this->editId = $cagar->id;
-            $this->kategori_budaya_id = $cagar->kategori_budaya_id;
-            $this->nama_cagar_budaya = $cagar->nama_cagar_budaya;
-            $this->deskripsi = $cagar->deskripsi;
-            $this->alamat = $cagar->alamat;
-            $this->latitude = $cagar->latitude;
-            $this->longitude = $cagar->longitude;
-            // $this->thumbnail = $cagar->thumbnail;
-            $this->sk_penetapan = $cagar->sk_penetapan;
-            $this->tahun_penemuan = $cagar->tahun_penemuan;
-            $this->status_pelestarian = $cagar->status_pelestarian;
-            
-            $this->showEditModal = true;
-        }
+    public function openEditModal(string $id)
+    {
+        $cagar = CagarBudaya::findOrFail($id);
+        $this->editId = $cagar->id;
+        $this->fill($cagar->only([
+            'kategori_budaya_id', 'nama_cagar_budaya', 'deskripsi', 
+            'alamat', 'latitude', 'longitude', 'sk_penetapan', 
+            'tahun_penemuan', 'status_pelestarian', 'status'
+        ]));
+        $this->thumbnail = null; // reset upload
+        $this->showEditModal = true;
+    }
 
-        public function closeEditModal()
-        {
-            $this->resetInput();
-            $this->showEditModal = false;
-        }
+    public function closeEditModal()
+    {
+        $this->resetInput();
+        $this->showEditModal = false;
+        // $this->resetValidation();
+    }
 
-         public function confirmDelete($id, $name)
-        {
-            $this->deleteId = $id;
-            $this->deleteName = $name;
-            $this->showDeleteModal = true;
-        }
+    public function confirmDelete($id, $name)
+    {
+        $this->deleteId = $id;
+        $this->deleteName = $name;
+        $this->showDeleteModal = true;
+    }
 
-        public function cancelDelete()
-        {
-            $this->deleteId = null;
-            $this->deleteName = null;
-            $this->showDeleteModal = false;
-        }
+    public function cancelDelete()
+    {
+        $this->deleteId = null;
+        $this->deleteName = null;
+        $this->showDeleteModal = false;
+    }
 
-            public function delete()
-            {
-                \App\Models\CagarBudaya::findOrFail($this->deleteId)->delete();
-                session()->flash('success', 'Cagar Budaya berhasil dihapus.');
-                $this->cancelDelete();
-            }
+    public function delete()
+    {
+        $cagar = CagarBudaya::findOrFail($this->deleteId);
+        if ($cagar->thumbnail) {
+            Storage::disk('public')->delete($cagar->thumbnail);
+        }
+        $cagar->delete();
+        session()->flash('success', 'Cagar Budaya berhasil dihapus.');
+        $this->cancelDelete();
+        unset($this->cagarBudaya);
+    }
 };
 ?>
 
@@ -268,7 +271,7 @@ new class extends Component
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($cagar_budaya as $index => $item)
+                    @forelse ($this->cagarBudaya as $index => $item)
                         <tr>
                             <td style="font-family:monospace; font-size:0.82rem; color:var(--text-muted);">
                                 {{ $index + 1 }}
@@ -362,7 +365,7 @@ new class extends Component
             </table>
 
             {{-- Pagination --}}
-            <x-admin.pagination :paginator="$cagar_budaya" />
+            <x-admin.pagination :paginator="$this->cagarBudaya" />
         </div>
     </div>
 

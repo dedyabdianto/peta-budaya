@@ -8,7 +8,7 @@
     <label>Kategori <span style="color:#DC2626;">*</span></label>
     <select wire:model="kategori_budaya_id">
         <option value="">-- Pilih Kategori --</option>
-        @foreach($kategoriList as $kategori)
+        @foreach($this->kategoriList as $kategori)
             <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
         @endforeach
     </select>
