@@ -51,7 +51,7 @@ new #[Layout('layouts.admin', ['title' => 'Kelola Kategori Budaya'])] class exte
         }
 
         return $this->view([
-            'kategori' => $query->with('user')->orderBy('nama_kategori')->paginate(1),
+            'kategori' => $query->with('user')->orderBy('nama_kategori')->paginate(10),
         ]);
     }
 

@@ -25,6 +25,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
     public string $latitude = '';
     public string $longitude = '';
     public $thumbnail;
+    public ?string $existingThumbnail = null;
     public string $sk_penetapan = '';
     public string $tahun_penemuan = '';
     public string $status_pelestarian = '';
@@ -190,6 +191,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
             'tahun_penemuan', 'status_pelestarian', 'status'
         ]));
         $this->thumbnail = null; // reset upload
+        $this->existingThumbnail = $cagar->thumbnail; // keep existing thumbnail path
         $this->showEditModal = true;
     }
 
@@ -229,6 +231,13 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
 ?>
 
 <div>
+    {{-- Leaflet CSS --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    {{-- Leaflet JS --}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     {{-- Page Header --}}
     <div class="page-header">
         <div class="page-header-actions">
@@ -372,7 +381,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
     {{-- modal tambah kategori --}}
     @if ($showCreateModal)
         <div class="modal-overlay" wire:click.self="closeCreateModal">
-            <div class="modal-container">
+            <div class="modal-container" style="max-width:680px;">
                 <div class="modal-header">
                     <div class="modal-header-info">
                         <div class="modal-icon green">
@@ -406,7 +415,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
     {{-- modal edit kategori --}}
     @if ($showEditModal)
         <div class="modal-overlay" wire:click.self="closeEditModal">
-            <div class="modal-container">
+            <div class="modal-container" style="max-width:680px;">
                 <div class="modal-header">
                     <div class="modal-header-info">
                         <div class="modal-icon gold">

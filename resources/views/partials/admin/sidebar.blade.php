@@ -18,10 +18,10 @@
             Kelola Peta & GIS
         </a>
 
-        <a href="{{ route('warisan.index') }}" wire:navigate class="nav-item {{ request()->routeIs('warisan.*') ? 'active' : '' }}">
+        {{-- <a href="{{ route('warisan.index') }}" wire:navigate class="nav-item {{ request()->routeIs('warisan.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">museum</span>
             Kelola Daftar Wisata & Warisan
-        </a>
+        </a> --}}
 
         <a href="{{ route('kategori-budaya.index') }}" wire:navigate class="nav-item {{ request()->routeIs('kategori-budaya.*') ? 'active' : '' }}">
             <span class="material-symbols-outlined">category</span>

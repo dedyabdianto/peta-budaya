@@ -27,23 +27,138 @@
     @error('alamat') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 
+{{-- Latitude & Longitude with Map Picker --}}
 <div class="form-group">
-    <label>Latitude</label>
-    <input type="number" step="any" wire:model="latitude" placeholder="-8.5" />
-    @error('latitude') <p class="form-error">{{ $message }}</p> @enderror
+    <label>Lokasi (Latitude & Longitude)</label>
+    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 10px;">
+        Klik pada peta untuk menentukan koordinat lokasi, atau masukkan manual di bawah peta.
+    </p>
+
+    {{-- Map Picker --}}
+    @php
+        $initLat = filled($latitude) ? (float) $latitude : null;
+        $initLng = filled($longitude) ? (float) $longitude : null;
+        $hasCoords = $initLat !== null && $initLng !== null && ($initLat != 0 || $initLng != 0);
+    @endphp
+    <div class="map-picker-wrapper"
+         wire:ignore
+         x-data="{
+            map: null,
+            marker: null,
+            hasCoords: {{ $hasCoords ? 'true' : 'false' }},
+            initLat: {{ $hasCoords ? $initLat : -8.4932 }},
+            initLng: {{ $hasCoords ? $initLng : 140.4018 }},
+            init() {
+                this.waitForLeaflet(() => this.initMap());
+            },
+            waitForLeaflet(callback) {
+                if (typeof L !== 'undefined') {
+                    callback();
+                } else {
+                    setTimeout(() => this.waitForLeaflet(callback), 100);
+                }
+            },
+            initMap() {
+                const latInput = this.$refs.mapEl.closest('.form-group').querySelector('[id^=input-latitude]');
+                const lonInput = this.$refs.mapEl.closest('.form-group').querySelector('[id^=input-longitude]');
+                const coordsDisplay = this.$refs.coordsDisplay;
+
+                let initZoom = this.hasCoords ? 15 : 10;
+
+                this.map = L.map(this.$refs.mapEl, {
+                    scrollWheelZoom: true,
+                    zoomControl: true,
+                }).setView([this.initLat, this.initLng], initZoom);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a>',
+                    maxZoom: 19,
+                }).addTo(this.map);
+
+                const markerIcon = L.divIcon({
+                    html: '<div style=&quot;background:#1A362D;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #D4AF37;display:flex;align-items:center;justify-content:center;&quot;><div style=&quot;background:#D4AF37;width:10px;height:10px;border-radius:50%;transform:rotate(45deg);&quot;></div></div>',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    className: 'map-custom-marker',
+                });
+
+                // Place marker if coordinates exist
+                if (this.hasCoords) {
+                    this.marker = L.marker([this.initLat, this.initLng], { icon: markerIcon, draggable: true }).addTo(this.map);
+                    coordsDisplay.textContent = this.initLat.toFixed(7) + ', ' + this.initLng.toFixed(7);
+                    this.marker.on('dragend', (e) => {
+                        const pos = e.target.getLatLng();
+                        this.updateCoords(pos.lat, pos.lng, latInput, lonInput, coordsDisplay);
+                    });
+                }
+
+                // Click to place/move marker
+                this.map.on('click', (e) => {
+                    const { lat, lng } = e.latlng;
+                    if (this.marker) {
+                        this.marker.setLatLng([lat, lng]);
+                    } else {
+                        this.marker = L.marker([lat, lng], { icon: markerIcon, draggable: true }).addTo(this.map);
+                        this.marker.on('dragend', (ev) => {
+                            const pos = ev.target.getLatLng();
+                            this.updateCoords(pos.lat, pos.lng, latInput, lonInput, coordsDisplay);
+                        });
+                    }
+                    this.updateCoords(lat, lng, latInput, lonInput, coordsDisplay);
+                });
+
+                // Fix map tiles not loading in modal
+                setTimeout(() => this.map.invalidateSize(), 300);
+            },
+            updateCoords(lat, lng, latInput, lonInput, coordsDisplay) {
+                const latVal = lat.toFixed(7);
+                const lngVal = lng.toFixed(7);
+                latInput.value = latVal;
+                lonInput.value = lngVal;
+                coordsDisplay.textContent = latVal + ', ' + lngVal;
+                latInput.dispatchEvent(new Event('input', { bubbles: true }));
+                lonInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }">
+        <div x-ref="mapEl" class="map-picker"></div>
+        <div class="map-picker-coords">
+            <span class="material-symbols-outlined" style="font-size:16px;">location_on</span>
+            <span x-ref="coordsDisplay">{{ $hasCoords ? number_format($initLat, 7) . ', ' . number_format($initLng, 7) : 'Klik pada peta untuk memilih lokasi' }}</span>
+        </div>
+    </div>
+
+    <div class="form-row" style="margin-top:12px;">
+        <div>
+            <label style="font-size:0.72rem; text-transform:none; letter-spacing:0; font-weight:600; color:var(--text-muted);">Latitude</label>
+            <input type="number" step="any" wire:model="latitude" id="input-latitude" placeholder="-8.4932" />
+            @error('latitude') <p class="form-error">{{ $message }}</p> @enderror
+        </div>
+        <div>
+            <label style="font-size:0.72rem; text-transform:none; letter-spacing:0; font-weight:600; color:var(--text-muted);">Longitude</label>
+            <input type="number" step="any" wire:model="longitude" id="input-longitude" placeholder="140.4018" />
+            @error('longitude') <p class="form-error">{{ $message }}</p> @enderror
+        </div>
+    </div>
 </div>
 
-<div class="form-group">
-    <label>Longitude</label>
-    <input type="number" step="any" wire:model="longitude" placeholder="140.4" />
-    @error('longitude') <p class="form-error">{{ $message }}</p> @enderror
-</div>
-
+{{-- Thumbnail with existing image preview --}}
 <div class="form-group">
     <label>Thumbnail</label>
     <input type="file" wire:model="thumbnail" accept="image/png, image/jpeg" />
+
+    {{-- Preview: new upload takes priority, fallback to existing --}}
     @if ($thumbnail)
-        <img src="{{ $thumbnail->temporaryUrl() }}" width="150">
+        <div style="margin-top:10px;">
+            <p style="font-size:0.72rem; color:var(--text-muted); margin:0 0 6px;">Preview (baru):</p>
+            <img src="{{ $thumbnail->temporaryUrl() }}" 
+                 style="width:150px; height:100px; object-fit:cover; border-radius:8px; border:1px solid var(--border-light);" />
+        </div>
+    @elseif (!empty($existingThumbnail))
+        <div style="margin-top:10px;">
+            <p style="font-size:0.72rem; color:var(--text-muted); margin:0 0 6px;">Thumbnail saat ini:</p>
+            <img src="{{ asset('storage/' . $existingThumbnail) }}" 
+                 style="width:150px; height:100px; object-fit:cover; border-radius:8px; border:1px solid var(--border-light);" />
+        </div>
     @endif
     @error('thumbnail') <p class="form-error">{{ $message }}</p> @enderror
 </div>
@@ -81,4 +196,3 @@
     </select>
     @error('status') <p class="form-error">{{ $message }}</p> @enderror
 </div>
-

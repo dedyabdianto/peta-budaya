@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class KategoriBudaya extends Model
 {
     use HasUuids;
-    
+
     protected $table = 'kategori_budayas';
+
     protected $primaryKey = 'id';
+
     protected $keyType = 'string';
+
     public $incrementing = false;
+
     protected $fillable = [
         'id',
         'nama_kategori',
@@ -21,7 +25,13 @@ class KategoriBudaya extends Model
         'deskripsi',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
+    }
+
+    public function cagarBudaya()
+    {
+        return $this->hasMany(CagarBudaya::class, 'kategori_budaya_id');
     }
 }
