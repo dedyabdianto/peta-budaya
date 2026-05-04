@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use App\Models\KategoriBudaya;
-use App\Models\Distrik;
+use Illuminate\Database\Eloquent\Model;
 
 class CagarBudaya extends Model
 {
     use HasUuids;
 
     protected $table = 'cagar_budayas';
+
     protected $primaryKey = 'id';
+
     protected $guarded = [];
 
     public function kategoriBudaya()
@@ -30,4 +30,8 @@ class CagarBudaya extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function galeri()
+    {
+        return $this->hasMany(Galeri::class, 'cagar_budaya_id');
+    }
 }

@@ -344,22 +344,26 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
                 this.map = L.map(this.$refs.gisMap, {
                     scrollWheelZoom: true,
                     zoomControl: true,
-                    dragging: true,
-                    touchZoom: true,
-                    doubleClickZoom: true,
-                }).setView([-8.49, 140.40], 10);
+                    zoomAnimation: true,
+                    fadeAnimation: true,
+                    markerZoomAnimation: true,
+                    zoomSnap: 1,
+                    zoomDelta: 1,
+                    wheelPxPerZoomLevel: 60,
+                }).setView([-8.49, 140.40], 13);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     maxZoom: 19,
+                    subdomains: ['a', 'b', 'c'],
                 }).addTo(this.map);
 
                 this.clusterGroup = L.markerClusterGroup({
                     showCoverageOnHover: true,
-                    zoomToBoundsOnClick: false,
+                    zoomToBoundsOnClick: true,
                     spiderfyOnMaxZoom: true,
                     disableClusteringAtZoom: 16,
-                    maxClusterRadius: 80,
+                    maxClusterRadius: 60,
                     animate: true,
                     animateAddingMarkers: true,
                     iconCreateFunction: function(cluster) {
@@ -415,7 +419,11 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
 
                 if (points.length > 0) {
                     var bounds = L.latLngBounds(points.map(function(p) { return [p.lat, p.lng]; }));
-                    this.map.fitBounds(bounds.pad(0.2));
+                    this.map.fitBounds(bounds.pad(0.15), {
+                        maxZoom: 15,
+                        animate: true,
+                        duration: 0.8
+                    });
                 }
 
                 setTimeout(function() { this.map.invalidateSize(); }.bind(this), 300);
