@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PetaDigitalController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page Routes
@@ -8,6 +9,7 @@ Route::view('/tentang-budaya', 'pages.landing.tentang-budaya')->name('landing.te
 Route::view('/daftar-warisan', 'pages.landing.daftar-warisan')->name('landing.daftar-warisan');
 Route::view('/galeri-warisan', 'pages.landing.galeri-warisan')->name('landing.galeri-warisan');
 Route::view('/lapor-situs', 'pages.landing.lapor-situs')->name('landing.lapor-situs');
+Route::get('/peta-digital', PetaDigitalController::class)->name('landing.peta-digital');
 
 Route::middleware(['auth'])->group(function () {
     Route::livewire('dashboard', 'pages::admin.index')->name('dashboard');

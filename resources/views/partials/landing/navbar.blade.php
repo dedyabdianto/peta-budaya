@@ -19,6 +19,8 @@
             href="{{ route('landing.daftar-warisan') }}">Daftar Warisan</a>
         <a class="{{ request()->routeIs('landing.galeri-warisan') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all"
             href="{{ route('landing.galeri-warisan') }}">Galeri</a>
+        <a class="{{ request()->routeIs('landing.peta-digital') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all flex items-center gap-1"
+            href="{{ route('landing.peta-digital') }}"><span class="material-symbols-outlined text-base">map</span>Peta</a>
         <a class="{{ request()->routeIs('landing.lapor-situs') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all"
             href="{{ route('landing.lapor-situs') }}">Lapor Situs</a>
     </div>
@@ -51,6 +53,8 @@
             href="{{ route('landing.daftar-warisan') }}">Daftar Warisan</a>
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('landing.galeri-warisan') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
             href="{{ route('landing.galeri-warisan') }}">Galeri Warisan</a>
+        <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors flex items-center gap-2 {{ request()->routeIs('landing.peta-digital') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
+            href="{{ route('landing.peta-digital') }}"><span class="material-symbols-outlined text-lg">map</span>Peta Digital</a>
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('landing.lapor-situs') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
             href="{{ route('landing.lapor-situs') }}">Lapor Situs</a>
     </div>
