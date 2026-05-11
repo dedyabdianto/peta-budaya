@@ -22,6 +22,10 @@
 
         {{-- Admin CSS --}}
         <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
+
+        {{-- Quill.js Rich Text Editor (free, single-file CDN) --}}
+        <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     </head>
     <body class="admin-body">
         <div class="admin-layout">

@@ -66,25 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Kelola Berita — show/hide form
-    const addBeritaBtn = document.getElementById('btn-add-berita');
-    const beritaListView = document.getElementById('berita-list-view');
-    const beritaFormView = document.getElementById('berita-form-view');
-    const cancelBeritaBtn = document.getElementById('cancel-berita-form');
-
-    if (addBeritaBtn && beritaListView && beritaFormView) {
-        addBeritaBtn.addEventListener('click', () => {
-            beritaListView.style.display = 'none';
-            beritaFormView.style.display = 'block';
-        });
-    }
-
-    if (cancelBeritaBtn && beritaListView && beritaFormView) {
-        cancelBeritaBtn.addEventListener('click', () => {
-            beritaFormView.style.display = 'none';
-            beritaListView.style.display = 'block';
-        });
-    }
+    // Kelola Berita — now uses SPA-style navigation (wire:navigate) to separate create/edit pages
 
     // ---- Upload Zone Drag & Drop Visual ----
     document.querySelectorAll('.upload-zone').forEach(zone => {

@@ -2612,3 +2612,631 @@ body.admin-body {
         padding: 10px 8px;
     }
 }
+
+/* ═══════════════════════════════════════════════════
+   BERITA MODULE STYLES
+   ═══════════════════════════════════════════════════ */
+
+/* Status Tabs */
+.berita-status-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+    background: var(--content-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
+.berita-status-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.berita-status-tab.active {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.berita-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(0,0,0,0.06);
+    color: var(--text-muted);
+}
+
+.berita-status-tab.active .berita-tab-count {
+    background: var(--jungle-mid);
+    color: #fff;
+}
+
+/* Toolbar */
+.berita-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.berita-toolbar-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.berita-filter-select {
+    padding: 8px 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    font-size: 0.82rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    outline: none;
+    transition: var(--transition-smooth);
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.berita-filter-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+
+/* Berita List Items */
+.berita-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 22px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    transition: var(--transition-smooth);
+}
+
+.berita-list-item:hover {
+    background: rgba(0,0,0,0.012);
+}
+
+.berita-list-item:last-child {
+    border-bottom: none;
+}
+
+.berita-list-thumb {
+    width: 80px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.berita-list-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.berita-list-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--content-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.berita-list-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.berita-list-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.berita-list-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.berita-list-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.berita-list-title a:hover {
+    color: var(--jungle-mid);
+}
+
+.berita-featured-badge {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.berita-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.berita-list-meta > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.berita-list-kategori {
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem !important;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--kat-color, #1A362D) 12%, transparent);
+    color: var(--kat-color, #1A362D) !important;
+}
+
+.berita-list-excerpt {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 6px 0 0;
+    line-height: 1.5;
+}
+
+.berita-list-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.berita-list-btns {
+    display: flex;
+    gap: 6px;
+}
+
+.berita-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+/* ---- Berita Form Layout ---- */
+.berita-form-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+
+.berita-form-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.berita-judul-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', 'Noto Serif', serif;
+    color: var(--text-primary);
+    background: var(--card-bg);
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.berita-judul-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+
+.berita-judul-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.berita-slug-preview {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 4px 10px;
+    background: var(--content-bg);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: 'Courier New', monospace;
+}
+
+.berita-slug-preview strong {
+    color: var(--jungle-mid);
+}
+
+/* Form Sidebar */
+.berita-form-sidebar {
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+}
+
+.berita-form-section {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.berita-form-section:last-child {
+    border-bottom: none;
+}
+
+.berita-form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+
+.berita-form-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--text-primary);
+    background: var(--card-bg);
+    outline: none;
+    transition: var(--transition-smooth);
+    font-family: inherit;
+    resize: vertical;
+}
+
+.berita-form-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+
+/* Thumbnail Upload */
+.berita-thumb-dropzone {
+    border: 2px dashed var(--border-light);
+    border-radius: 10px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    background: var(--content-bg);
+}
+
+.berita-thumb-dropzone:hover,
+.berita-thumb-dropzone.drag-active {
+    border-color: var(--gold);
+    background: rgba(212,175,55,0.04);
+}
+
+.berita-thumb-dropzone p {
+    margin: 4px 0 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.berita-thumb-preview {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.berita-thumb-preview img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+}
+
+.berita-thumb-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.berita-thumb-remove:hover {
+    background: rgba(239,68,68,0.8);
+}
+
+/* Tags */
+.berita-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.berita-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: var(--gold-bg);
+    color: var(--text-secondary);
+}
+
+.berita-tag-chip button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.berita-tag-chip button:hover {
+    color: #DC2626;
+}
+
+/* Status Radio Options */
+.berita-status-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.berita-status-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    color: var(--text-secondary);
+}
+
+.berita-status-radio:hover {
+    background: rgba(0,0,0,0.03);
+}
+
+.berita-status-radio.active {
+    background: rgba(212,175,55,0.08);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.berita-status-radio input[type="radio"] {
+    display: none;
+}
+
+/* Featured toggle */
+.berita-featured-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.berita-featured-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gold);
+}
+
+/* SEO Toggle */
+.berita-seo-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    font-family: inherit;
+}
+
+/* Back link */
+.berita-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.berita-back-link:hover {
+    color: var(--jungle-mid);
+}
+
+/* Form action buttons */
+.berita-form-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Quill.js editor overrides */
+#quill-editor {
+    min-height: 400px;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+#quill-editor .ql-editor {
+    min-height: 400px;
+}
+
+.ql-toolbar.ql-snow {
+    border-radius: 12px 12px 0 0 !important;
+    border-color: var(--border-light) !important;
+    background: var(--content-bg) !important;
+}
+
+.ql-container.ql-snow {
+    border-radius: 0 0 12px 12px !important;
+    border-color: var(--border-light) !important;
+    background: var(--card-bg) !important;
+}
+
+.ql-editor.ql-blank::before {
+    font-style: normal !important;
+    color: var(--text-muted) !important;
+}
+
+.ql-snow .ql-stroke {
+    stroke: var(--text-secondary) !important;
+}
+
+.ql-snow .ql-fill {
+    fill: var(--text-secondary) !important;
+}
+
+.ql-snow .ql-picker-label {
+    color: var(--text-secondary) !important;
+}
+
+.ql-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.ql-editor blockquote {
+    border-left: 4px solid var(--gold) !important;
+    padding-left: 16px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Spin animation */
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Berita responsive */
+@media (max-width: 1024px) {
+    .berita-form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .berita-form-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .berita-list-item {
+        flex-direction: column;
+        padding: 14px 16px;
+    }
+
+    .berita-list-thumb {
+        width: 100%;
+        height: 140px;
+    }
+
+    .berita-list-actions {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .berita-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .berita-toolbar-filters {
+        flex-direction: column;
+    }
+
+    .berita-form-actions {
+        flex-direction: column;
+    }
+
+    .berita-form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .berita-judul-input {
+        font-size: 1rem;
+    }
+}
+

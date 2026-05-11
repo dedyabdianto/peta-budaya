@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BeritaImageController;
 use App\Http\Controllers\PetaDigitalController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/kelola-warisan', 'pages::warisan.index')->name('warisan.index');
     Route::livewire('/kelola-galeri', 'pages::galeri.index')->name('galeri.index');
     Route::livewire('/kelola-berita', 'pages::berita.index')->name('berita.index');
+    Route::livewire('/kelola-berita/tulis', 'pages::berita.create')->name('berita.create');
+    Route::livewire('/kelola-berita/{berita}/edit', 'pages::berita.edit')->name('berita.edit');
+    Route::post('/admin/berita/upload-image', [BeritaImageController::class, 'store'])->name('berita.upload-image');
     Route::livewire('/verifikasi-laporan', 'pages::verifikasi.index')->name('verifikasi.index');
     Route::livewire('/pengaturan', 'pages::pengaturan.index')->name('pengaturan.index');
 });
