@@ -57,10 +57,13 @@
 
     {{-- Footer --}}
     <div class="sidebar-footer">
-        <a href="{{ route('warisan.index') }}" wire:navigate class="sidebar-new-record">
-            <span class="material-symbols-outlined" style="font-size:18px">add</span>
-            New Record
-        </a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="sidebar-new-record" style="width:100%;cursor:pointer;">
+                <span class="material-symbols-outlined" style="font-size:18px">logout</span>
+                Logout
+            </button>
+        </form>
 
         <div class="sidebar-user">
             <img class="sidebar-user-avatar"

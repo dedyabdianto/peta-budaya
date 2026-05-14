@@ -16,7 +16,7 @@
         <a class="{{ request()->routeIs('landing.tentang-budaya') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all"
             href="{{ route('landing.tentang-budaya') }}">Tentang Budaya</a>
         <a class="{{ request()->routeIs('landing.daftar-warisan') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all"
-            href="{{ route('landing.daftar-warisan') }}">Daftar Warisan</a>
+            href="{{ route('landing.daftar-warisan') }}">Daftar Cagar Budaya</a>
         <a class="{{ request()->routeIs('landing.galeri-warisan') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all"
             href="{{ route('landing.galeri-warisan') }}">Galeri</a>
         <a class="{{ request()->routeIs('landing.peta-digital') ? 'text-yellow-600 dark:text-yellow-500 font-semibold' : 'text-emerald-800 dark:text-emerald-200 opacity-80' }} hover:opacity-100 hover:scale-105 transition-all flex items-center gap-1"
@@ -50,7 +50,7 @@
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('landing.tentang-budaya') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
             href="{{ route('landing.tentang-budaya') }}">Tentang Budaya</a>
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('landing.daftar-warisan') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
-            href="{{ route('landing.daftar-warisan') }}">Daftar Warisan</a>
+            href="{{ route('landing.daftar-warisan') }}">Daftar Cagar Budaya</a>
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('landing.galeri-warisan') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"
             href="{{ route('landing.galeri-warisan') }}">Galeri Warisan</a>
         <a class="px-4 py-3 rounded-xl text-base font-medium transition-colors flex items-center gap-2 {{ request()->routeIs('landing.peta-digital') ? 'bg-emerald-50 text-yellow-600 font-semibold' : 'text-emerald-800 hover:bg-emerald-50/50' }}"

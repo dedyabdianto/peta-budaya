@@ -344,6 +344,12 @@
             html += '</div>';
 
             html += '<div class="peta-detail-coords"><span class="material-symbols-outlined" style="font-size:13px;">explore</span>' + p.lat.toFixed(7) + ', ' + p.lng.toFixed(7) + '</div>';
+
+            html += '<a href="/cagar-budaya/' + p.id + '" class="peta-detail-link">' +
+                '<span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>' +
+                'Kunjungi Halaman Detail' +
+                '<span class="material-symbols-outlined" style="font-size:14px;margin-left:auto;">arrow_forward</span>' +
+                '</a>';
             html += '</div>';
 
             content.innerHTML = html;

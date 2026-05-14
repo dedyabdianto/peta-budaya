@@ -521,6 +521,32 @@
     border-top: 1px solid rgba(3, 33, 25, 0.06);
 }
 
+.peta-detail-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #032119;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.peta-detail-link:hover {
+    background: #0a3d2e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(3, 33, 25, 0.3);
+}
+
+.peta-detail-link .material-symbols-outlined {
+    font-size: 16px;
+}
+
 /* Empty State */
 .peta-empty-state {
     display: flex;

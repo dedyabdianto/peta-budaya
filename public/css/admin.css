@@ -2940,6 +2940,29 @@ body.admin-body {
     box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
 }
 
+/* Quick-add Kategori Button */
+.berita-add-kategori-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--jungle-mid);
+    font-family: inherit;
+    transition: var(--transition-smooth);
+    opacity: 0.75;
+}
+
+.berita-add-kategori-btn:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
 /* Thumbnail Upload */
 .berita-thumb-dropzone {
     border: 2px dashed var(--border-light);

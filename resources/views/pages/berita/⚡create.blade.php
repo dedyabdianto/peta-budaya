@@ -33,10 +33,39 @@ new #[Layout('layouts.admin')] #[Title('Tulis Berita Baru')] class extends Compo
     public bool $isUploading = false;
     public array $uploadResults = [];
 
+    // Quick-add kategori modal
+    public string $newKategoriNama = '';
+    public string $newKategoriWarna = '#1A362D';
+
     #[Computed]
     public function kategoriOptions()
     {
         return KategoriBerita::orderBy('nama_kategori')->get();
+    }
+
+    public function saveKategoriBerita()
+    {
+        $this->validate([
+            'newKategoriNama' => 'required|string|max:255|unique:kategori_beritas,nama_kategori',
+        ]);
+
+        $kategori = KategoriBerita::create([
+            'nama_kategori' => $this->newKategoriNama,
+            'warna' => $this->newKategoriWarna ?: '#1A362D',
+        ]);
+
+        // Auto-select the new kategori
+        $this->kategoriBeritaId = $kategori->id;
+
+        // Reset modal fields
+        $this->newKategoriNama = '';
+        $this->newKategoriWarna = '#1A362D';
+
+        // Clear cached computed property so dropdown refreshes
+        unset($this->kategoriOptions);
+
+        // Dispatch browser event to close modal
+        $this->dispatch('kategori-berita-saved');
     }
 
     public function updatedJudul()

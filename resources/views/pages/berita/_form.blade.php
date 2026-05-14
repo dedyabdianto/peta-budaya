@@ -63,18 +63,82 @@
     </div>
 
     {{-- Kategori --}}
-    <div class="berita-form-section">
+    <div class="berita-form-section" x-data="{ showKategoriModal: false }">
         <h4 class="berita-form-section-title">
             <span class="material-symbols-outlined" style="font-size:18px;">category</span>
             Kategori
         </h4>
-        <select wire:model="kategoriBeritaId" class="berita-form-input">
+        <select wire:model="kategoriBeritaId" class="berita-form-input"
+                x-on:change="if($el.value === '__tambah__') { $el.value = ''; @this.set('kategoriBeritaId', null); showKategoriModal = true; }">
             <option value="">Pilih Kategori</option>
             @foreach($this->kategoriOptions as $kat)
                 <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
             @endforeach
+            <option value="__tambah__">＋ Tambah Kategori Baru...</option>
         </select>
         @error('kategoriBeritaId') <p class="form-error">{{ $message }}</p> @enderror
+
+        {{-- Quick-add button --}}
+        <button type="button" class="berita-add-kategori-btn" x-on:click="showKategoriModal = true">
+            <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+            Tambah Kategori Baru
+        </button>
+
+        {{-- Modal Tambah Kategori Berita --}}
+        <template x-teleport="body">
+            <div class="modal-overlay" x-show="showKategoriModal" x-transition:enter="modal-enter" x-transition:leave="modal-leave"
+                 x-on:keydown.escape.window="showKategoriModal = false" x-cloak
+                 x-on:click.self="showKategoriModal = false"
+                 x-on:kategori-berita-saved.window="showKategoriModal = false">
+                <div class="modal-container" style="max-width:480px;" x-on:click.stop>
+                    {{-- Header --}}
+                    <div class="modal-header">
+                        <div class="modal-header-info">
+                            <div class="modal-icon green">
+                                <span class="material-symbols-outlined">category</span>
+                            </div>
+                            <div>
+                                <h3>Tambah Kategori Berita</h3>
+                                <p>Buat kategori baru untuk mengelompokkan berita.</p>
+                            </div>
+                        </div>
+                        <button type="button" class="modal-close-btn" x-on:click="showKategoriModal = false">
+                            <span class="material-symbols-outlined" style="font-size:20px;">close</span>
+                        </button>
+                    </div>
+
+                    {{-- Body --}}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="modal_nama_kategori">Nama Kategori <span style="color:#DC2626;">*</span></label>
+                            <input type="text" id="modal_nama_kategori" wire:model="newKategoriNama"
+                                   placeholder="Contoh: Politik, Ekonomi, Olahraga..." />
+                            @error('newKategoriNama') <p class="form-error">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="modal_warna_kategori">Warna Label</label>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <input type="text" id="modal_warna_kategori" wire:model.live="newKategoriWarna"
+                                       placeholder="#1A362D" style="flex:1;" />
+                                <input type="color" wire:model.live="newKategoriWarna"
+                                       style="width:44px; height:40px; border:1px solid var(--border-light); border-radius:10px; cursor:pointer; padding:2px;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Footer --}}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" x-on:click="showKategoriModal = false">Batal</button>
+                        <button type="button" class="btn btn-primary" wire:click="saveKategoriBerita"
+                                wire:loading.attr="disabled" wire:target="saveKategoriBerita">
+                            <span class="material-symbols-outlined" style="font-size:18px;" wire:loading.remove wire:target="saveKategoriBerita">save</span>
+                            <span class="material-symbols-outlined spin" style="font-size:18px;" wire:loading wire:target="saveKategoriBerita">progress_activity</span>
+                            Simpan Kategori
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 
     {{-- Tags --}}

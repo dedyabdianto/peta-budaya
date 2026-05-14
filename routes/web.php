@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 // Landing Page Routes
 Route::view('/', 'pages.landing.beranda')->name('home');
 Route::view('/tentang-budaya', 'pages.landing.tentang-budaya')->name('landing.tentang-budaya');
-Route::view('/daftar-warisan', 'pages.landing.daftar-warisan')->name('landing.daftar-warisan');
-Route::view('/galeri-warisan', 'pages.landing.galeri-warisan')->name('landing.galeri-warisan');
+Route::livewire('/daftar-cagar-budaya', 'pages::landing.daftar-warisan')->name('landing.daftar-warisan');
+Route::livewire('/cagar-budaya/{id}', 'pages::landing.detail-cagar-budaya')->name('landing.cagar-budaya.detail');
+Route::livewire('/galeri-warisan', 'pages::landing.galeri-warisan')->name('landing.galeri-warisan');
+Route::livewire('/galeri/{id}', 'pages::landing.detail-galeri')->name('landing.galeri.detail');
 Route::view('/lapor-situs', 'pages.landing.lapor-situs')->name('landing.lapor-situs');
 Route::get('/peta-digital', PetaDigitalController::class)->name('landing.peta-digital');
 
