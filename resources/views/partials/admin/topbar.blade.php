@@ -8,10 +8,7 @@
 
         <span class="topbar-brand">Malind Heritage Archive</span>
 
-        <div class="topbar-search">
-            <span class="material-symbols-outlined">search</span>
-            <input type="text" placeholder="Search archive..." />
-        </div>
+
     </div>
 
     <div class="topbar-right">

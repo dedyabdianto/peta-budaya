@@ -39,7 +39,7 @@
 
 body.admin-body {
     margin: 0;
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
     background: var(--content-bg);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
@@ -93,7 +93,7 @@ body.admin-body {
 
 .sidebar-logo h2 {
     margin: 0;
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1.15rem;
     font-weight: 700;
     color: #FFFFFF;
@@ -103,7 +103,7 @@ body.admin-body {
 
 .sidebar-logo span {
     display: block;
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', sans-serif;
     font-size: 0.68rem;
     font-weight: 600;
     color: var(--gold);
@@ -281,7 +281,7 @@ body.admin-body {
 }
 
 .topbar-brand {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     font-style: italic;
@@ -426,7 +426,7 @@ body.admin-body {
 }
 
 .page-header h1 {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -2856,7 +2856,7 @@ body.admin-body {
     border-radius: 12px;
     font-size: 1.25rem;
     font-weight: 700;
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Poppins', sans-serif;
     color: var(--text-primary);
     background: var(--card-bg);
     outline: none;
@@ -3150,7 +3150,7 @@ body.admin-body {
 /* Quill.js editor overrides */
 #quill-editor {
     min-height: 400px;
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
     font-size: 0.92rem;
     line-height: 1.8;
     color: var(--text-primary);
@@ -3262,4 +3262,40 @@ body.admin-body {
         font-size: 1rem;
     }
 }
+
+/* ---- Dashboard Map Markers (Leaflet) ---- */
+.peta-marker-icon {
+    background: none !important;
+    border: none !important;
+}
+
+.peta-marker {
+    width: 34px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.peta-marker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--mk-color, #1A362D);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    border: 2.5px solid rgba(255,255,255,0.9);
+}
+
+.peta-marker .material-symbols-outlined {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    color: #fff;
+    margin-top: -6px;
+    font-variation-settings: 'FILL' 1;
+}
+
 

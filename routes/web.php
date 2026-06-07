@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BeritaImageController;
+use App\Http\Controllers\LaporanExportController;
 use App\Http\Controllers\PetaDigitalController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +12,7 @@ Route::livewire('/daftar-cagar-budaya', 'pages::landing.daftar-warisan')->name('
 Route::livewire('/cagar-budaya/{id}', 'pages::landing.detail-cagar-budaya')->name('landing.cagar-budaya.detail');
 Route::livewire('/galeri-warisan', 'pages::landing.galeri-warisan')->name('landing.galeri-warisan');
 Route::livewire('/galeri/{id}', 'pages::landing.detail-galeri')->name('landing.galeri.detail');
-Route::view('/lapor-situs', 'pages.landing.lapor-situs')->name('landing.lapor-situs');
+Route::livewire('/lapor-situs', 'pages::landing.lapor-situs')->name('landing.lapor-situs');
 Route::get('/peta-digital', PetaDigitalController::class)->name('landing.peta-digital');
 
 Route::middleware(['auth'])->group(function () {
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('/kelola-berita/{berita}/edit', 'pages::berita.edit')->name('berita.edit');
     Route::post('/admin/berita/upload-image', [BeritaImageController::class, 'store'])->name('berita.upload-image');
     Route::livewire('/verifikasi-laporan', 'pages::verifikasi.index')->name('verifikasi.index');
+    Route::get('/verifikasi-laporan/export-csv', LaporanExportController::class)->name('verifikasi.export-csv');
     Route::livewire('/pengaturan', 'pages::pengaturan.index')->name('pengaturan.index');
 });
 
