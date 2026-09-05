@@ -1,6 +1,13 @@
 /.phpunit.cache
 /node_modules
-/public/build
+/public/build/*
+!/public/build/manifest.json
+!/public/build/.vite/
+!/public/build/.vite/manifest.json
+!/public/build/assets/
+/public/build/assets/*
+!/public/build/assets/*.js
+!/public/build/assets/*.css
 /public/hot
 /public/storage
 /storage/*.key
@@ -21,3 +28,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Database & Documentation
+*.sql
+*dfd*.html
+*diagram*.html
+*flowchart*.html
+/docs/
