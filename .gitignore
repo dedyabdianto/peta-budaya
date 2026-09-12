@@ -12,6 +12,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/framework/lsp-*.php
 /vendor
 .env
 .env.backup

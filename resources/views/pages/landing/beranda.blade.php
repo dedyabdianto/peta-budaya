@@ -2,8 +2,8 @@
     {{-- Hero Section --}}
     <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img alt="Tanah Malind Landscape" class="w-full h-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlRRSWmEYIop32FmBjp8vrrDs12iYR2njp6n0lqnsgV5LTmmhtyrDP_LCmZRhfva_WFfpOmo1etxA4jkk7iO7ZOGFa6Q-zEq78qnjE-E6L0Rs_Ic9U4-DA5eAfZhqTIt4vBTE2hSoV9LGNvm9DqHV8pl54JoiZ7AyN0rY0sNUQ1oSBmVPwX5EoHlABDwMh0lNeyGD44wLB4_UyWKqkKM_onoNT3Izq-mLWKzWEE3gNnD1EorM7sdKzWPZs8PtEyWtWHoqf6DHzrkU" />
+            <img alt="Warisan Budaya Tanah Malind" class="w-full h-full object-cover"
+                src="{{ asset('HeroSection.png') }}" />
             <div class="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-surface"></div>
         </div>
         <div class="relative z-10 max-w-5xl px-6 md:px-8 text-center text-on-primary">
@@ -75,4 +75,7 @@
             </div>
         </div>
     </section>
+
+    {{-- Mitra Strategis Section --}}
+    @include('partials.landing.mitra')
 </x-layouts::landing>

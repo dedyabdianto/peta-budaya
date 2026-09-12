@@ -53,7 +53,7 @@
                         <h3>{{ $title }}</h3>
                     </div>
                 </div>
-                <button class="modal-close-btn" wire:click="{{ $cancel }}">
+                <button type="button" class="modal-close-btn" wire:click="{{ $cancel }}">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>

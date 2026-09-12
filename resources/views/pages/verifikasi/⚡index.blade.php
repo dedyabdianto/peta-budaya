@@ -283,10 +283,10 @@ new #[Layout('layouts.admin')] #[Title('Verifikasi Laporan')] class extends Comp
                             </td>
                             <td>
                                 <div style="display:flex;gap:6px;">
-                                    <button class="btn btn-primary btn-sm" wire:click="openReview('{{ $laporan->id }}')">
+                                    <button type="button" class="btn btn-primary btn-sm" wire:click="openReview('{{ $laporan->id }}')">
                                         {{ $laporan->status === 'menunggu' ? 'Review' : 'Lihat' }}
                                     </button>
-                                    <button class="btn btn-danger btn-sm" wire:click="confirmDelete('{{ $laporan->id }}', '{{ addslashes($laporan->nama_situs) }}')">
+                                    <button type="button" class="btn btn-danger btn-sm" wire:click="confirmDelete('{{ $laporan->id }}', '{{ addslashes($laporan->nama_situs) }}')">
                                         <span class="material-symbols-outlined" style="font-size:14px">delete</span>
                                     </button>
                                 </div>
@@ -330,7 +330,7 @@ new #[Layout('layouts.admin')] #[Title('Verifikasi Laporan')] class extends Comp
                             <p>Tinjau detail laporan situs dari masyarakat.</p>
                         </div>
                     </div>
-                    <button class="modal-close-btn" wire:click="closeReview">
+                    <button type="button" class="modal-close-btn" wire:click="closeReview">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>

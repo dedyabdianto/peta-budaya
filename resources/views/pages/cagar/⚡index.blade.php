@@ -172,13 +172,14 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
     {
         $this->resetInput();
         $this->showCreateModal = true;
+        $this->dispatch('open-create-modal');
     }
 
     public function closeCreateModal()
     {
         $this->resetInput();
         $this->showCreateModal = false;
-        // $this->resetValidation();
+        $this->dispatch('close-modal');
     }
 
     public function openEditModal(string $id)
@@ -193,13 +194,14 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
         $this->thumbnail = null; // reset upload
         $this->existingThumbnail = $cagar->thumbnail; // keep existing thumbnail path
         $this->showEditModal = true;
+        $this->dispatch('open-edit-modal');
     }
 
     public function closeEditModal()
     {
         $this->resetInput();
         $this->showEditModal = false;
-        // $this->resetValidation();
+        $this->dispatch('close-modal');
     }
 
     public function confirmDelete($id, $name)
@@ -230,14 +232,14 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
 };
 ?>
 
-<div>
-    {{-- Leaflet CSS --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
-    {{-- Leaflet JS --}}
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<div x-data="{
+    showCreateModal: false,
+    showEditModal: false,
+}"
+x-on:close-modal.window="showCreateModal = false; showEditModal = false"
+x-on:open-edit-modal.window="showEditModal = true; $dispatch('modal-opened')"
+x-on:open-create-modal.window="showCreateModal = true; $dispatch('modal-opened')"
+>
     {{-- Page Header --}}
     <div class="page-header">
         <div class="page-header-actions">
@@ -245,7 +247,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
                 <h1>{{ $title }}</h1>
                 <p>{{ $title }} untuk klasifikasi situs warisan budaya Tanah Malind.</p>
             </div>
-            <button class="btn btn-primary" wire:click="openCreateModal">
+            <button type="button" class="btn btn-primary" x-on:click="showCreateModal = true; $dispatch('modal-opened')">
                 <span class="material-symbols-outlined" style="font-size:18px">add</span>
                 Tambah Cagar Budaya
             </button>
@@ -330,14 +332,18 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
                             </td>
                             <td>
                                 <div style="display:flex; gap:6px;">
-                                    <button class="btn btn-outline btn-sm"
-                                        wire:click="openEditModal('{{ $item->id }}')">
-                                        <span class="material-symbols-outlined" style="font-size:14px">edit</span>
+                                    <button type="button" class="btn btn-outline btn-sm"
+                                        wire:click="openEditModal('{{ $item->id }}')"
+                                        wire:loading.attr="disabled">
+                                        <span class="material-symbols-outlined" wire:loading.remove wire:target="openEditModal('{{ $item->id }}')" style="font-size:14px">edit</span>
+                                        <span class="material-symbols-outlined spin" wire:loading wire:target="openEditModal('{{ $item->id }}')" style="font-size:14px">progress_activity</span>
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger btn-sm"
-                                        wire:click="confirmDelete('{{ $item->id }}', '{{ $item->nama_kategori }}')">
-                                        <span class="material-symbols-outlined" style="font-size:14px">delete</span>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        wire:click="confirmDelete('{{ $item->id }}', '{{ addslashes($item->nama_cagar_budaya) }}')"
+                                        wire:loading.attr="disabled">
+                                        <span class="material-symbols-outlined" wire:loading.remove wire:target="confirmDelete('{{ $item->id }}')" style="font-size:14px">delete</span>
+                                        <span class="material-symbols-outlined spin" wire:loading wire:target="confirmDelete('{{ $item->id }}')" style="font-size:14px">progress_activity</span>
                                         Hapus
                                     </button>
                                 </div>
@@ -379,72 +385,76 @@ new #[Layout('layouts.admin')] #[Title('Kelola Cagar Budaya')] class extends Com
     </div>
 
     {{-- modal tambah kategori --}}
-    @if ($showCreateModal)
-        <div class="modal-overlay" wire:click.self="closeCreateModal">
-            <div class="modal-container" style="max-width:680px;">
-                <div class="modal-header">
-                    <div class="modal-header-info">
-                        <div class="modal-icon green">
-                            <span class="material-symbols-outlined">add_circle</span>
-                        </div>
-                        <div>
-                            <h3>Tambah Cagar Budaya Baru</h3>
-                            <p>Isi data untuk menambahkan cagar budaya baru.</p>
-                        </div>
+    <div class="modal-overlay"
+         x-show="showCreateModal"
+         x-cloak
+         x-on:click.self="showCreateModal = false; $wire.closeCreateModal()"
+         x-on:keydown.escape.window="showCreateModal = false; $wire.closeCreateModal()">
+        <div class="modal-container" style="max-width:680px;">
+            <div class="modal-header">
+                <div class="modal-header-info">
+                    <div class="modal-icon green">
+                        <span class="material-symbols-outlined">add_circle</span>
                     </div>
-                    <button class="modal-close-btn" wire:click="closeCreateModal">
-                        <span class="material-symbols-outlined">close</span>
+                    <div>
+                        <h3>Tambah Cagar Budaya Baru</h3>
+                        <p>Isi data untuk menambahkan cagar budaya baru.</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close-btn" x-on:click="showCreateModal = false; $wire.closeCreateModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form wire:submit.prevent="store" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @include('pages.cagar._form')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" x-on:click="showCreateModal = false; $wire.closeCreateModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined" style="font-size:18px">save</span>
+                        Simpan Cagar Budaya
                     </button>
                 </div>
-                <form wire:submit.prevent="store" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        @include('pages.cagar._form')
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline" wire:click="closeCreateModal">Batal</button>
-                        <button type="submit" class="btn btn-primary">
-                            <span class="material-symbols-outlined" style="font-size:18px">save</span>
-                            Simpan Cagar Budaya
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
-    @endif
+    </div>
 
     {{-- modal edit kategori --}}
-    @if ($showEditModal)
-        <div class="modal-overlay" wire:click.self="closeEditModal">
-            <div class="modal-container" style="max-width:680px;">
-                <div class="modal-header">
-                    <div class="modal-header-info">
-                        <div class="modal-icon gold">
-                            <span class="material-symbols-outlined">edit_note</span>
-                        </div>
-                        <div>
-                            <h3>Edit Cagar Budaya</h3>
-                            <p>Perbarui data cagar budaya yang sudah ada.</p>
-                        </div>
+    <div class="modal-overlay"
+         x-show="showEditModal"
+         x-cloak
+         x-on:click.self="showEditModal = false; $wire.closeEditModal()"
+         x-on:keydown.escape.window="showEditModal = false; $wire.closeEditModal()">
+        <div class="modal-container" style="max-width:680px;">
+            <div class="modal-header">
+                <div class="modal-header-info">
+                    <div class="modal-icon gold">
+                        <span class="material-symbols-outlined">edit_note</span>
                     </div>
-                    <button class="modal-close-btn" wire:click="closeEditModal">
-                        <span class="material-symbols-outlined">close</span>
+                    <div>
+                        <h3>Edit Cagar Budaya</h3>
+                        <p>Perbarui data cagar budaya yang sudah ada.</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close-btn" x-on:click="showEditModal = false; $wire.closeEditModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form wire:submit="update">
+                <div class="modal-body">
+                    @include('pages.cagar._form')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" x-on:click="showEditModal = false; $wire.closeEditModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined" style="font-size:18px">save</span>
+                        Perbarui Cagar Budaya
                     </button>
                 </div>
-                <form wire:submit="update">
-                    <div class="modal-body">
-                        @include('pages.cagar._form')
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline" wire:click="closeEditModal">Batal</button>
-                        <button type="submit" class="btn btn-primary">
-                            <span class="material-symbols-outlined" style="font-size:18px">save</span>
-                            Perbarui Cagar Budaya
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
-    @endif
+    </div>
 
     {{-- modal hapus kategori --}}
     <x-admin.modal-delete :show="$showDeleteModal" :name="$deleteName" title="Hapus Cagar Budaya"

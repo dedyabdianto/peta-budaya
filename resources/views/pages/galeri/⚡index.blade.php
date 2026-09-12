@@ -410,10 +410,10 @@ new #[Layout('layouts.admin')] #[Title('Kelola Galeri')] class extends Component
 
                 {{-- Hover Overlay --}}
                 <div class="galeri-card-overlay">
-                    <button class="galeri-card-action" wire:click="openEdit('{{ $item->id }}')" title="Edit">
+                    <button type="button" class="galeri-card-action" wire:click="openEdit('{{ $item->id }}')" title="Edit">
                         <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
                     </button>
-                    <button class="galeri-card-action danger" wire:click="confirmDelete('{{ $item->id }}', '{{ $item->judul }}')" title="Hapus">
+                    <button type="button" class="galeri-card-action danger" wire:click="confirmDelete('{{ $item->id }}', '{{ $item->judul }}')" title="Hapus">
                         <span class="material-symbols-outlined" style="font-size:16px;">delete</span>
                     </button>
                 </div>
@@ -483,7 +483,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Galeri')] class extends Component
     {{-- Lightbox --}}
     @if($showLightbox)
         <div class="galeri-lightbox" wire:click.self="closeLightbox">
-            <button class="galeri-lightbox-close" wire:click="closeLightbox">
+            <button type="button" class="galeri-lightbox-close" wire:click="closeLightbox">
                 <span class="material-symbols-outlined">close</span>
             </button>
             <div class="galeri-lightbox-content">
@@ -507,7 +507,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Galeri')] class extends Component
                             <p>Perbarui informasi media galeri.</p>
                         </div>
                     </div>
-                    <button class="modal-close-btn" wire:click="closeEdit">
+                    <button type="button" class="modal-close-btn" wire:click="closeEdit">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>

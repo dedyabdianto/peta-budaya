@@ -25,6 +25,13 @@
         {{-- Quill.js Rich Text Editor (free, single-file CDN) --}}
         <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+        {{-- Leaflet Maps & MarkerCluster (Loaded once globally for Admin Panel) --}}
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+        <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     </head>
     <body class="admin-body">
         <div class="admin-layout">

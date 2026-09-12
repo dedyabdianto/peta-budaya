@@ -86,7 +86,7 @@
 
         {{-- Modal Tambah Kategori Berita --}}
         <template x-teleport="body">
-            <div class="modal-overlay" x-show="showKategoriModal" x-transition:enter="modal-enter" x-transition:leave="modal-leave"
+            <div class="modal-overlay" x-show="showKategoriModal" x-transition.opacity.duration.150ms
                  x-on:keydown.escape.window="showKategoriModal = false" x-cloak
                  x-on:click.self="showKategoriModal = false"
                  x-on:kategori-berita-saved.window="showKategoriModal = false">

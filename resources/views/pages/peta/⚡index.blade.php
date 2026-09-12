@@ -111,16 +111,6 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
 ?>
 
 <div>
-    {{-- Leaflet CSS & JS --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    {{-- MarkerCluster plugin --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-
     {{-- Page Header --}}
     <div class="page-header">
         <div class="page-header-actions">
@@ -211,7 +201,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
                                 @endif
                             </td>
                             <td>
-                                <button class="btn btn-outline btn-sm" wire:click="openEditCoordModal('{{ $item->id }}')">
+                                <button type="button" class="btn btn-outline btn-sm" wire:click="openEditCoordModal('{{ $item->id }}')">
                                     <span class="material-symbols-outlined" style="font-size:14px">edit_location_alt</span>
                                     Edit Koordinat
                                 </button>
@@ -252,7 +242,7 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
                         <p>{{ $editName }}</p>
                     </div>
                 </div>
-                <button class="modal-close-btn" wire:click="closeEditCoordModal">
+                <button type="button" class="modal-close-btn" wire:click="closeEditCoordModal">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
@@ -277,6 +267,13 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
                                 init() { this.waitForLeaflet(() => this.initMap()); },
                                 waitForLeaflet(cb) { typeof L !== 'undefined' ? cb() : setTimeout(() => this.waitForLeaflet(cb), 100); },
                                 initMap() {
+                                    if (this.map) {
+                                        try { this.map.remove(); } catch(e) {}
+                                        this.map = null;
+                                    }
+                                    if (this.$refs.editMapEl && this.$refs.editMapEl._leaflet_id) {
+                                        this.$refs.editMapEl._leaflet_id = null;
+                                    }
                                     const latIn = document.getElementById('edit-lat');
                                     const lngIn = document.getElementById('edit-lng');
                                     const cd = this.$refs.cd;
@@ -285,7 +282,14 @@ new #[Layout('layouts.admin')] #[Title('Kelola Peta & GIS')] class extends Compo
                                     const icon = L.divIcon({ html: '<div style=&quot;background:#1A362D;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #D4AF37;display:flex;align-items:center;justify-content:center;&quot;><div style=&quot;background:#D4AF37;width:10px;height:10px;border-radius:50%;transform:rotate(45deg);&quot;></div></div>', iconSize:[28,28], iconAnchor:[14,28], className:'map-custom-marker' });
                                     if (this.hasCoords) { this.marker = L.marker([this.initLat,this.initLng],{icon,draggable:true}).addTo(this.map); cd.textContent=this.initLat.toFixed(7)+', '+this.initLng.toFixed(7); this.marker.on('dragend',e=>{const p=e.target.getLatLng();this.upd(p.lat,p.lng,latIn,lngIn,cd);}); }
                                     this.map.on('click',e=>{const{lat,lng}=e.latlng;if(this.marker){this.marker.setLatLng([lat,lng]);}else{this.marker=L.marker([lat,lng],{icon,draggable:true}).addTo(this.map);this.marker.on('dragend',ev=>{const p=ev.target.getLatLng();this.upd(p.lat,p.lng,latIn,lngIn,cd);});}this.upd(lat,lng,latIn,lngIn,cd);});
-                                    setTimeout(()=>this.map.invalidateSize(),300);
+                                    requestAnimationFrame(() => { if (this.map) this.map.invalidateSize(); });
+                                    setTimeout(() => { if (this.map) this.map.invalidateSize(); }, 200);
+                                },
+                                destroy() {
+                                    if (this.map) {
+                                        try { this.map.remove(); } catch(e) {}
+                                        this.map = null;
+                                    }
                                 },
                                 upd(lat,lng,li,lo,cd){li.value=lat.toFixed(7);lo.value=lng.toFixed(7);cd.textContent=lat.toFixed(7)+', '+lng.toFixed(7);li.dispatchEvent(new Event('input',{bubbles:true}));lo.dispatchEvent(new Event('input',{bubbles:true}));}
                              }">
